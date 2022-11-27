@@ -1,35 +1,47 @@
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <list>
-#include <assert.h>
 
-#include "Colecao.h"
+#include "Album.h"
 #include "Figurinha.h"
 
 using namespace std;
 
-Colecao::Colecao(string filePath)
+Album::Album(int paginas, string filePath)
 {
+  setPaginas(paginas);
   setFilePath(filePath);
 }
 
-Colecao::Colecao(const Colecao &c)
+Album::Album(const Album &a)
 {
 }
 
-Colecao::Colecao()
+Album::Album()
 {
-  setFilePath("persistence/collection.csv");
+  // setPaginas(1);
+  // setFilePath("persistence/album.csv");
 }
 
-void Colecao::operator=(const Colecao &c)
+void Album::operator=(const Album &a)
 {
-  filePath = c.filePath;
+  paginas = a.paginas;
+  filePath = a.filePath;
 }
 
-void Colecao::listarFigurinhas()
+void Album::colarFigurinha(Figurinha figurinha)
+{
+  file << figurinha.getId() << ", "
+       << figurinha.getCodigo() << ", "
+       << figurinha.getTitulo() << ", "
+       << figurinha.getSecao() << ", "
+       << figurinha.getTipo() << ", "
+       << endl;
+}
+
+void Album::listarFigurinhas()
 {
   cout
       << left
@@ -71,41 +83,36 @@ void Colecao::listarFigurinhas()
   }
 }
 
-void Colecao::colocarFigurinha(Figurinha figurinha)
-{
-  file << figurinha.getId() << ", "
-       << figurinha.getCodigo() << ", "
-       << figurinha.getTitulo() << ", "
-       << figurinha.getSecao() << ", "
-       << figurinha.getTipo() << ", "
-       << endl;
-}
-
-void Colecao::setFilePath(string newPath)
+void Album::setFilePath(string newPath)
 {
   filePath = newPath;
   handleFileOpening();
+
   return;
 }
-
-string Colecao::getFilePath()
-{
-  return filePath;
-}
-
-void Colecao::handleFileOpening()
+void Album::handleFileOpening()
 {
   file.open(filePath, ios::out | ios::in);
   if (file.fail())
   {
-    cout << "error in collection " << filePath << endl;
+    cout << "error in album " << filePath << endl;
     throw runtime_error("Não foi possível abrir o arquivo");
   }
 
   return;
 }
 
-Colecao::~Colecao()
+void Album::setPaginas(int paginas)
 {
-  file.close();
+  paginas = paginas;
+}
+
+string Album::getFilePath()
+{
+  return filePath;
+}
+
+Album::~Album()
+{
+  this->file.close();
 }

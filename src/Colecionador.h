@@ -10,7 +10,8 @@
 class Colecionador
 {
 public:
-  Colecionador(int id, string nome, Album albumFile, Colecao collectionFile);
+  Colecionador(int id, string nome, Album *albumFile, Colecao *collectionFile);
+  Colecionador(Colecionador &);
 
   void mostrarAlbum();   // abstração de ListarFigurinhas()
   void mostrarColecao(); // abstração de ListarFigurinhas()
@@ -19,15 +20,15 @@ public:
 
   void setId(int id);
   void setNome(string nome);
-  void setAlbum(Album album);
-  void setCollection(Colecao collection);
+  void setAlbum(Album &album);
+  void setCollection(Colecao &collection);
 
   int getId();
 
 private:
   int id;
   string name;
-  Album album;
-  Colecao collection;
+  Album *album;
+  Colecao *collection;
 };
 #endif

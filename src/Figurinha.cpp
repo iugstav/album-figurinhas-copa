@@ -14,14 +14,7 @@ Figurinha::Figurinha(int novoId, string novoCodigo, string novoTitulo, string no
 	setSecao(novaSecao);
 	setTipo(novoTipo);
 }
-Figurinha::Figurinha()
-{
-	this->id = 0;
-	this->codigo = "111111";
-	this->titulo = "111111";
-	this->secao = "abc";
-	this->tipo = "aaaaaa";
-};
+Figurinha::Figurinha(){};
 
 void Figurinha::trocar(string cedidas[], string recebidas[])
 {
@@ -74,5 +67,5 @@ string Figurinha::getSecao()
 
 string Figurinha::getTipo()
 {
-	return secao;
+	return tipo;
 }

@@ -20,6 +20,7 @@ public:
 	void operator=(const Colecao &c);
 
 	void listarFigurinhas();
+	int quantidadeDeFigurinhas();
 	void colocarFigurinha(Figurinha figurinha);
 
 	void setFilePath(string filePath);
@@ -33,5 +34,6 @@ private:
 	fstream file;
 
 	void handleFileOpening();
+	void readDataFromCollection();
 };
 #endif

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <locale.h>
+#include <stdlib.h>
 #include <string>
 #include <vector>
 
@@ -778,13 +779,20 @@ vector<Figurinha> initialize_data()
 	return store;
 }
 
+int random_number()
+{
+	srand((unsigned)time(NULL));
+	int random = rand() % 757;
+
+	return random;
+}
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char **argv)
 {
 	setlocale(LC_ALL, "");
 
-	vector<Figurinha> figurinhas = initialize_data();
+	// vector<Figurinha> figurinhas = initialize_data();
 
 	string username; // nome do usuário
 	int opcao;			 // armazena a escolha do usuário
@@ -796,9 +804,11 @@ int main(int argc, char **argv)
 	cout << "Aqui você pode pedir figurinhas aleatórias ao mestre e colar\nno seu álbum ou colocar na sua coleção para trocas futuras.\n"
 			 << endl;
 
-	Album album(80, "persistence/album.csv");
-	Colecao collection("persistence/collection.csv");
-	Colecionador user(12345, username, album, collection);
+	Album album(80, "./persistence/album.csv");
+	Colecao collection("./persistence/collection.csv");
+	Album *albumPtr = &album;
+	Colecao *collectionPtr = &collection;
+	Colecionador user(12345, username, albumPtr, collectionPtr);
 
 	do // perform user-selected actions
 	{
@@ -820,6 +830,7 @@ int main(int argc, char **argv)
 			break;
 		case 2:
 			// FAZER ESSE CASE
+			cout << random_number() << endl;
 			break;
 		case 3:
 			// FAZER ESSE CASE
