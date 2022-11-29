@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -31,14 +32,30 @@ void Album::operator=(const Album &a)
   filePath = a.filePath;
 }
 
+int Album::quantidadeDeFigurinhas()
+{
+  return figurinhas.size();
+}
+
 void Album::colarFigurinha(Figurinha figurinha)
 {
-  file << figurinha.getId() << ", "
-       << figurinha.getCodigo() << ", "
-       << figurinha.getTitulo() << ", "
-       << figurinha.getSecao() << ", "
-       << figurinha.getTipo() << ", "
+  if (file.is_open())
+  {
+    resetFileState();
+  }
+  else
+  {
+    handleFileOpening();
+  }
+
+  file << figurinha.getId() << ","
+       << figurinha.getCodigo() << ","
+       << figurinha.getTitulo() << ","
+       << figurinha.getSecao() << ","
+       << figurinha.getTipo()
        << endl;
+
+  figurinhas.push_back(figurinha);
 }
 
 void Album::listarFigurinhas()
@@ -71,10 +88,10 @@ void Album::listarFigurinhas()
         << setw(8)
         << figurinhas[i].getCodigo()
         << left
-        << setw(30)
+        << setw(29)
         << figurinhas[i].getTitulo()
         << left
-        << setw(14)
+        << setw(12)
         << figurinhas[i].getSecao()
         << left
         << setw(20)
@@ -87,19 +104,66 @@ void Album::setFilePath(string newPath)
 {
   filePath = newPath;
   handleFileOpening();
+  readDataFromCollection();
 
   return;
 }
+
 void Album::handleFileOpening()
 {
-  file.open(filePath, ios::out | ios::in);
+  file.open(filePath, fstream::out | fstream::app);
   if (file.fail())
   {
-    cout << "error in album " << filePath << endl;
     throw runtime_error("Não foi possível abrir o arquivo");
   }
 
   return;
+}
+
+void Album::readDataFromCollection()
+{
+  vector<vector<string>> conteudo;
+  vector<string> linhaDoArquivo;
+  string linha, palavra;
+
+  if (file.is_open())
+  {
+    while (getline(file, linha))
+    {
+      linhaDoArquivo.clear();
+
+      stringstream ss(linha);
+
+      while (getline(ss, palavra, ','))
+      {
+        linhaDoArquivo.push_back(palavra);
+      }
+      conteudo.push_back(linhaDoArquivo);
+    }
+  }
+  else
+  {
+    throw runtime_error("could not find file");
+  }
+
+  for (int i = 0; i < conteudo.size(); i++)
+  {
+    Figurinha tempFig(stoi(conteudo[i][0]),
+                      conteudo[i][1],
+                      conteudo[i][2],
+                      conteudo[i][3],
+                      conteudo[i][4]);
+
+    figurinhas.push_back(tempFig);
+  }
+
+  return;
+}
+
+void Album::resetFileState()
+{
+  file.close();
+  handleFileOpening();
 }
 
 void Album::setPaginas(int paginas)
@@ -114,5 +178,5 @@ string Album::getFilePath()
 
 Album::~Album()
 {
-  this->file.close();
+  file.close();
 }

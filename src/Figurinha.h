@@ -14,6 +14,9 @@ class Figurinha
 public:
 	Figurinha(int novoId, string novoCodigo, string novoTitulo, string novaSecao, string novoTipo);
 	Figurinha();
+
+	void operator=(const Figurinha &f);
+
 	void trocar(string cedidas[], string recebidas[]);
 
 	void setId(int newId);

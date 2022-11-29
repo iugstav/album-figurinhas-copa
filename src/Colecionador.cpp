@@ -15,10 +15,23 @@ Colecionador::Colecionador(int id, string nome, Album *newAlbum, Colecao *collec
   setAlbum(*newAlbum);
   setCollection(*collection);
 }
+Colecionador::Colecionador(Colecionador &c) {}
 
 void Colecionador::mostrarAlbum()
 {
-  return album->listarFigurinhas();
+  if (album->quantidadeDeFigurinhas() == 0)
+  {
+    cout << "Seu álbum está vazio. \n"
+         << endl;
+
+    return;
+  }
+  else
+  {
+    album->listarFigurinhas();
+
+    return;
+  }
 }
 
 void Colecionador::mostrarColecao()
@@ -40,12 +53,12 @@ void Colecionador::mostrarColecao()
 
 void Colecionador::colarFigurinhaNoAlbum(Figurinha figurinha)
 {
-  return album->colarFigurinha(figurinha);
+  album->colarFigurinha(figurinha);
 }
 
 void Colecionador::colocarFigurinhaNaColecao(Figurinha figurinha)
 {
-  return collection->colocarFigurinha(figurinha);
+  collection->colocarFigurinha(figurinha);
 }
 
 void Colecionador::setId(int novoId)

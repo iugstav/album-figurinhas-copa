@@ -35,5 +35,6 @@ private:
 
 	void handleFileOpening();
 	void readDataFromCollection();
+	void resetFileState();
 };
 #endif

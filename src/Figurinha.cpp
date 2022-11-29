@@ -16,6 +16,15 @@ Figurinha::Figurinha(int novoId, string novoCodigo, string novoTitulo, string no
 }
 Figurinha::Figurinha(){};
 
+void Figurinha::operator=(const Figurinha &f)
+{
+	setId(f.id);
+	setCodigo(f.codigo);
+	setTitulo(f.titulo);
+	setSecao(f.secao);
+	setTipo(f.tipo);
+}
+
 void Figurinha::trocar(string cedidas[], string recebidas[])
 {
 }

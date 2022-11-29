@@ -21,6 +21,7 @@ public:
 
 	void colarFigurinha(Figurinha figurinha);
 	void listarFigurinhas();
+	int quantidadeDeFigurinhas();
 
 	void setPaginas(int paginas);
 	void setFilePath(string filePath);
@@ -36,5 +37,7 @@ private:
 	vector<Figurinha> figurinhas;
 
 	void handleFileOpening();
+	void readDataFromCollection();
+	void resetFileState();
 };
 #endif

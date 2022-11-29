@@ -12,7 +12,7 @@
 
 using namespace std;
 
-// stores all the world cup cards into memory and returns a vector of cards
+// armazena todas as figurinhas em memória e retorna todas como um vetor.
 vector<Figurinha> initialize_data()
 {
 	vector<Figurinha> store = {
@@ -779,6 +779,16 @@ vector<Figurinha> initialize_data()
 	return store;
 }
 
+void printar_figurinha(Figurinha f)
+{
+	cout << "Id: " << f.getId() << endl
+			 << "Código: " << f.getCodigo() << endl
+			 << "Título: " << f.getTitulo() << endl
+			 << "Seção: " << f.getSecao() << endl
+			 << "Tipo: " << f.getTipo() << endl
+			 << "\n";
+}
+
 int random_number()
 {
 	srand((unsigned)time(NULL));
@@ -786,13 +796,12 @@ int random_number()
 
 	return random;
 }
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char **argv)
 {
 	setlocale(LC_ALL, "");
 
-	// vector<Figurinha> figurinhas = initialize_data();
+	vector<Figurinha> figurinhas = initialize_data();
 
 	string username; // nome do usuário
 	int opcao;			 // armazena a escolha do usuário
@@ -806,19 +815,19 @@ int main(int argc, char **argv)
 
 	Album album(80, "./persistence/album.csv");
 	Colecao collection("./persistence/collection.csv");
+
 	Album *albumPtr = &album;
 	Colecao *collectionPtr = &collection;
 	Colecionador user(12345, username, albumPtr, collectionPtr);
 
-	do // perform user-selected actions
+	do // Interação com o usuário
 	{
 		cout << "Digite a opção desejada:\n"
 				 << "  1 Listar figurinhas da coleção\n"
 				 << "  2 Adquirir figurinha\n"
 				 << "  3 Trocar figurinha\n"
-				 << "  4 Colar figurinha no álbum\n"
-				 << "  5 Listar figurinhas do álbum\n"
-				 << "  6 Sair do programa\n";
+				 << "  4 Listar figurinhas do álbum\n"
+				 << "  5 Sair do programa\n";
 
 		cout << "? ";
 		cin >> opcao;
@@ -826,23 +835,59 @@ int main(int argc, char **argv)
 		switch (opcao)
 		{
 		case 1:
+		{
 			user.mostrarColecao();
+			cout << "\n";
 			break;
+		}
 		case 2:
-			// FAZER ESSE CASE
-			cout << random_number() << endl;
+		{
+			cout << "Muito bem! Sua figurinha sorteada foi essa:\n\n";
+			Figurinha sorted = figurinhas[random_number()];
+			printar_figurinha(sorted);
+
+			int option;
+
+			cout << "Deseja colar a figurinha no Álbum ou colocar na sua coleção?" << endl
+					 << "  1 Colar no Álbum." << endl
+					 << "  2 Colocar na coleção." << endl;
+			cout << "? ";
+			cin >> option;
+
+			switch (option)
+			{
+			case 1:
+				user.colarFigurinhaNoAlbum(sorted);
+				cout << "Ok! Sua figurinha agora está no álbum.\n"
+						 << endl;
+				break;
+
+			case 2:
+				user.colocarFigurinhaNaColecao(sorted);
+				cout << "Ok! Sua figurinha agora está na coleção\n"
+						 << endl;
+				break;
+
+			default:
+				cout << "Essa não é uma opção válida." << endl;
+				break;
+			}
 			break;
+		}
 		case 3:
 			// FAZER ESSE CASE
 			break;
 		case 4:
-			// ESTUDAR ESSE CASE
-			break;
-		case 5:
+		{
 			user.mostrarAlbum();
+			cout << "\n";
 			break;
-		}									 // end switch
-	} while (opcao < 6); // end do...while
-
-	cout << "Programa encerrado.\n\n";
+		}
+		default:
+		{
+			cout << "\nPrograma encerrado.\n";
+			exit(0);
+		} // end switch
+		}
+	} while (true); // end do...while
 }

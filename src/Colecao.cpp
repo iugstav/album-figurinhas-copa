@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -27,6 +28,32 @@ Colecao::Colecao()
 void Colecao::operator=(const Colecao &c)
 {
   filePath = c.filePath;
+}
+
+int Colecao::quantidadeDeFigurinhas()
+{
+  return figurinhas.size();
+}
+
+void Colecao::colocarFigurinha(Figurinha figurinha)
+{
+  if (file.is_open())
+  {
+    resetFileState();
+  }
+  else
+  {
+    handleFileOpening();
+  }
+
+  file << figurinha.getId() << ","
+       << figurinha.getCodigo() << ","
+       << figurinha.getTitulo() << ","
+       << figurinha.getSecao() << ","
+       << figurinha.getTipo()
+       << endl;
+
+  figurinhas.push_back(figurinha);
 }
 
 void Colecao::listarFigurinhas()
@@ -75,23 +102,6 @@ void Colecao::listarFigurinhas()
   cout << "\n";
 }
 
-int Colecao::quantidadeDeFigurinhas()
-{
-  return figurinhas.size();
-}
-
-void Colecao::colocarFigurinha(Figurinha figurinha)
-{
-  file << figurinha.getId() << ", "
-       << figurinha.getCodigo() << ", "
-       << figurinha.getTitulo() << ", "
-       << figurinha.getSecao() << ", "
-       << figurinha.getTipo() << ", "
-       << endl;
-
-  figurinhas.push_back(figurinha);
-}
-
 void Colecao::setFilePath(string newPath)
 {
   filePath = newPath;
@@ -108,10 +118,9 @@ string Colecao::getFilePath()
 
 void Colecao::handleFileOpening()
 {
-  file.open(filePath, ios::out | ios::in);
+  file.open(filePath, fstream::out | fstream::app);
   if (file.fail())
   {
-    cout << "error in collection " << filePath << endl;
     throw runtime_error("Não foi possível abrir o arquivo");
   }
 
@@ -156,6 +165,12 @@ void Colecao::readDataFromCollection()
   }
 
   return;
+}
+
+void Colecao::resetFileState()
+{
+  file.close();
+  handleFileOpening();
 }
 
 Colecao::~Colecao()
