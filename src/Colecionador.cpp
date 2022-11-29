@@ -61,6 +61,8 @@ void Colecionador::colocarFigurinhaNaColecao(Figurinha figurinha)
   collection->colocarFigurinha(figurinha);
 }
 
+void Colecionador::trocarFigurinhas(vector<Figurinha> cedidas, vector<Figurinha> recebidas[]) {}
+
 void Colecionador::setId(int novoId)
 {
   id = novoId;

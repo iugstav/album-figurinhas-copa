@@ -17,8 +17,6 @@ public:
 
 	void operator=(const Figurinha &f);
 
-	void trocar(string cedidas[], string recebidas[]);
-
 	void setId(int newId);
 	void setCodigo(string newCode);
 	void setTitulo(string titulo);

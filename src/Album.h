@@ -37,7 +37,7 @@ private:
 	vector<Figurinha> figurinhas;
 
 	void handleFileOpening();
-	void readDataFromCollection();
+	void readDataFromAlbum();
 	void resetFileState();
 };
 #endif

@@ -2,6 +2,7 @@
 #define COLECIONADOR_H
 
 #include <string>
+#include <vector>
 
 #include "Figurinha.h"
 #include "Album.h"
@@ -10,13 +11,14 @@
 class Colecionador
 {
 public:
-  Colecionador(int id, string nome, Album *albumFile, Colecao *collectionFile);
+  Colecionador(int id, string nome, Album *album, Colecao *collection);
   Colecionador(Colecionador &);
 
   void mostrarAlbum();   // abstração de ListarFigurinhas()
   void mostrarColecao(); // abstração de ListarFigurinhas()
   void colarFigurinhaNoAlbum(Figurinha figurinha);
   void colocarFigurinhaNaColecao(Figurinha figurinha);
+  void trocarFigurinhas(vector<Figurinha> cedidas, vector<Figurinha> recebidas[]);
 
   void setId(int id);
   void setNome(string nome);

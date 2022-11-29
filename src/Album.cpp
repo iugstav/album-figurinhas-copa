@@ -104,7 +104,7 @@ void Album::setFilePath(string newPath)
 {
   filePath = newPath;
   handleFileOpening();
-  readDataFromCollection();
+  readDataFromAlbum();
 
   return;
 }
@@ -120,7 +120,7 @@ void Album::handleFileOpening()
   return;
 }
 
-void Album::readDataFromCollection()
+void Album::readDataFromAlbum()
 {
   vector<vector<string>> conteudo;
   vector<string> linhaDoArquivo;
