@@ -61,7 +61,21 @@ void Colecionador::colocarFigurinhaNaColecao(Figurinha figurinha)
   collection->colocarFigurinha(figurinha);
 }
 
-void Colecionador::trocarFigurinhas(vector<Figurinha> cedidas, vector<Figurinha> recebidas[]) {}
+void Colecionador::trocarFigurinhas(vector<string> cedidas, vector<Figurinha> recebidas)
+{
+  collection->retirarFigurinha(cedidas);
+
+  remove(collection->getFilePath().c_str());
+
+  this->collection->setFilePath("persistence/collection.csv");
+
+  collection->writeFromVector();
+
+  for (int i = 0; i < recebidas.size(); i++)
+  {
+    this->collection->colocarFigurinha(recebidas[i]);
+  }
+}
 
 void Colecionador::setId(int novoId)
 {
@@ -86,4 +100,10 @@ void Colecionador::setCollection(Colecao &novaCollection)
 int Colecionador::getId()
 {
   return id;
+}
+
+Colecionador::~Colecionador()
+{
+  delete (album);
+  delete (collection);
 }

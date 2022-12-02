@@ -22,9 +22,15 @@ public:
 	void listarFigurinhas();
 	int quantidadeDeFigurinhas();
 	void colocarFigurinha(Figurinha figurinha);
+	void retirarFigurinha(vector<string> ids);
+
+	void writeFromVector();
 
 	void setFilePath(string filePath);
 	string getFilePath();
+
+	void setFigurinhas(vector<Figurinha> v);
+	vector<Figurinha> getFigurinhas();
 
 	~Colecao();
 

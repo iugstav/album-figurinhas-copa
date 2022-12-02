@@ -25,10 +25,6 @@ void Figurinha::operator=(const Figurinha &f)
 	setTipo(f.tipo);
 }
 
-void Figurinha::trocar(string cedidas[], string recebidas[])
-{
-}
-
 void Figurinha::setId(int novoId)
 {
 	id = novoId;

@@ -1,4 +1,3 @@
-#include <cstdio>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -14,6 +13,7 @@ using namespace std;
 Colecao::Colecao(string filePath)
 {
   setFilePath(filePath);
+  readDataFromCollection();
 }
 
 Colecao::Colecao(const Colecao &c)
@@ -28,6 +28,7 @@ Colecao::Colecao()
 void Colecao::operator=(const Colecao &c)
 {
   filePath = c.filePath;
+  setFilePath(filePath);
 }
 
 int Colecao::quantidadeDeFigurinhas()
@@ -41,10 +42,6 @@ void Colecao::colocarFigurinha(Figurinha figurinha)
   {
     resetFileState();
   }
-  else
-  {
-    handleFileOpening();
-  }
 
   file << figurinha.getId() << ","
        << figurinha.getCodigo() << ","
@@ -54,6 +51,51 @@ void Colecao::colocarFigurinha(Figurinha figurinha)
        << endl;
 
   figurinhas.push_back(figurinha);
+}
+
+void Colecao::retirarFigurinha(vector<string> ids)
+{
+  int size = this->quantidadeDeFigurinhas();
+
+  for (int i = 0; i < figurinhas.size(); i++)
+  {
+    for (int j = 0; j < ids.size(); j++)
+    {
+      if (figurinhas[i].getId() == stoi(ids[j]))
+      {
+        figurinhas.erase(figurinhas.begin() + i);
+      }
+    }
+  }
+
+  if (figurinhas.size() == size)
+  {
+    cout << "Id não encontrado na sua coleção" << endl;
+  }
+
+  return;
+}
+
+void Colecao::writeFromVector()
+{
+  if (file.is_open())
+  {
+    resetFileState();
+  }
+  else
+  {
+    handleFileOpening();
+  }
+
+  for (int i = 0; i < this->figurinhas.size(); i++)
+  {
+    file << figurinhas[i].getId() << ","
+         << figurinhas[i].getCodigo() << ","
+         << figurinhas[i].getTitulo() << ","
+         << figurinhas[i].getSecao() << ","
+         << figurinhas[i].getTipo()
+         << endl;
+  }
 }
 
 void Colecao::listarFigurinhas()
@@ -106,7 +148,6 @@ void Colecao::setFilePath(string newPath)
 {
   filePath = newPath;
   handleFileOpening();
-  readDataFromCollection();
 
   return;
 }
@@ -116,12 +157,26 @@ string Colecao::getFilePath()
   return filePath;
 }
 
+void Colecao::setFigurinhas(vector<Figurinha> v)
+{
+  this->figurinhas = v;
+}
+
+vector<Figurinha> Colecao::getFigurinhas()
+{
+  return this->figurinhas;
+}
+
 void Colecao::handleFileOpening()
 {
-  file.open(filePath, fstream::out | fstream::app);
+
+  file.open(filePath, fstream::out | fstream::app | fstream::in);
   if (file.fail())
   {
-    throw runtime_error("Não foi possível abrir o arquivo");
+    file.open(filePath, fstream::out);
+    file.close();
+
+    file.open(filePath, fstream::out | fstream::app | fstream::in);
   }
 
   return;
@@ -133,24 +188,17 @@ void Colecao::readDataFromCollection()
   vector<string> linhaDoArquivo;
   string linha, palavra;
 
-  if (file.is_open())
+  while (getline(file, linha))
   {
-    while (getline(file, linha))
+    linhaDoArquivo.clear();
+
+    stringstream ss(linha);
+
+    while (getline(ss, palavra, ','))
     {
-      linhaDoArquivo.clear();
-
-      stringstream ss(linha);
-
-      while (getline(ss, palavra, ','))
-      {
-        linhaDoArquivo.push_back(palavra);
-      }
-      conteudo.push_back(linhaDoArquivo);
+      linhaDoArquivo.push_back(palavra);
     }
-  }
-  else
-  {
-    throw runtime_error("could not find file");
+    conteudo.push_back(linhaDoArquivo);
   }
 
   for (int i = 0; i < conteudo.size(); i++)

@@ -1,9 +1,11 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <locale.h>
 #include <stdlib.h>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "Album.h"
 #include "Colecao.h"
@@ -11,6 +13,25 @@
 #include "Colecionador.h"
 
 using namespace std;
+
+const string WHITESPACE = " \n\r\t\f\v";
+
+string ltrim(const string &s)
+{
+	size_t start = s.find_first_not_of(WHITESPACE);
+	return (start == string::npos) ? "" : s.substr(start);
+}
+
+string rtrim(const string &s)
+{
+	size_t end = s.find_last_not_of(WHITESPACE);
+	return (end == string::npos) ? "" : s.substr(0, end + 1);
+}
+
+string trim(const string &s)
+{
+	return rtrim(ltrim(s));
+}
 
 // armazena todas as figurinhas em memória e retorna todas como um vetor.
 vector<Figurinha> initialize_data()
@@ -875,8 +896,48 @@ int main(int argc, char **argv)
 			break;
 		}
 		case 3:
-			// FAZER ESSE CASE
+		{
+			string cartasCedidas, cartasRecebidas;
+			string temp;
+			vector<string> cedidas, recebidas;
+			vector<Figurinha> result;
+
+			cout << "Ok! Digite os id's separados por vírgula das figurinhas da sua coleção que você deseja trocar:" << endl;
+			cin >> cartasCedidas;
+
+			cout << "Ótimo! Agora Digite os id's também separados por vírgula das figurinhas que você deseja adquirir:" << endl;
+			cin >> cartasRecebidas;
+
+			stringstream sc(cartasCedidas);
+			stringstream sr(cartasRecebidas);
+
+			while (getline(sc, temp, ','))
+			{
+				cedidas.push_back(trim(temp));
+			}
+
+			while (getline(sr, temp, ','))
+			{
+				recebidas.push_back(trim(temp));
+			}
+
+			for (int i = 0; i < figurinhas.size(); i++)
+			{
+				for (int j = 0; j < recebidas.size(); j++)
+				{
+					if (figurinhas[i].getId() == stoi(recebidas[j]))
+					{
+						Figurinha tempFig(figurinhas[i].getId(), figurinhas[i].getCodigo(), figurinhas[i].getTitulo(), figurinhas[i].getSecao(), figurinhas[i].getTipo());
+
+						result.push_back(tempFig);
+					}
+				}
+			}
+
+			user.trocarFigurinhas(cedidas, result);
+
 			break;
+		}
 		case 4:
 		{
 			user.mostrarAlbum();
