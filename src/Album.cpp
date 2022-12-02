@@ -14,6 +14,7 @@ Album::Album(int paginas, string filePath)
 {
   setPaginas(paginas);
   setFilePath(filePath);
+  readDataFromAlbum();
 }
 
 Album::Album(const Album &a)
@@ -48,6 +49,15 @@ void Album::colarFigurinha(Figurinha figurinha)
     handleFileOpening();
   }
 
+  for (int i = 0; i < figurinhas.size(); i++)
+  {
+    if (figurinhas[i].getId() == figurinha.getId())
+    {
+      cout << "Figurinha já está no álbum" << endl;
+      break;
+    }
+  }
+
   file << figurinha.getId() << ","
        << figurinha.getCodigo() << ","
        << figurinha.getTitulo() << ","
@@ -66,7 +76,7 @@ void Album::listarFigurinhas()
       << "Id"
       << left
       << setw(8)
-      << "Codigo"
+      << "Código"
       << left
       << setw(30)
       << "Título"
@@ -104,17 +114,19 @@ void Album::setFilePath(string newPath)
 {
   filePath = newPath;
   handleFileOpening();
-  readDataFromAlbum();
 
   return;
 }
 
 void Album::handleFileOpening()
 {
-  file.open(filePath, fstream::out | fstream::app);
+  file.open(filePath, fstream::out | fstream::app | fstream::in);
   if (file.fail())
   {
-    throw runtime_error("Não foi possível abrir o arquivo");
+    file.open(filePath, fstream::out);
+    file.close();
+
+    file.open(filePath, fstream::out | fstream::app | fstream::in);
   }
 
   return;
